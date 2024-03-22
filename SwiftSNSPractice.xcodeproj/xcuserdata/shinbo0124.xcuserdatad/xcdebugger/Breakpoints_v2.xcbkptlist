@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "BD0769B8-6052-46EF-BD88-F78FCE9FCE01"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A7B76BBF-60B9-4D9A-B33A-1059BD0274F2"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwiftSNSPractice/Views/ErrorView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "8"
+            endingLineNumber = "8"
+            landmarkName = "unknown"
+            landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "459E9C85-E234-4EF4-87A5-8889DFA9A493"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwiftSNSPractice/ViewModels/AllPostsViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "10"
+            endingLineNumber = "10"
+            landmarkName = "AllPostsViewModel"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "459E9C85-E234-4EF4-87A5-8889DFA9A493 - a132aa6cb80d0d9d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SwiftSNSPractice.AllPostsViewModel.deinit"
+                  moduleName = "SwiftSNSPractice"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shinbo0124/Documents/swiftChallenges/SwiftSNSPractice/SwiftSNSPractice/ViewModels/AllPostsViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "459E9C85-E234-4EF4-87A5-8889DFA9A493 - 7d3e5ed8b09fae8e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SwiftSNSPractice.AllPostsViewModel.__deallocating_deinit"
+                  moduleName = "SwiftSNSPractice"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/shinbo0124/Documents/swiftChallenges/SwiftSNSPractice/SwiftSNSPractice/ViewModels/AllPostsViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBj3s-xJFsnCpycThcniLQKiPU0lCItw34</string>
+	<key>GCM_SENDER_ID</key>
+	<string>66059426531</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>take.shin0124-icloud.com.SwiftSNSPractice</string>
+	<key>PROJECT_ID</key>
+	<string>swiftsnspractice</string>
+	<key>STORAGE_BUCKET</key>
+	<string>swiftsnspractice.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:66059426531:ios:786d8ad1b6938b1c1e83d6</string>
+</dict>
+</plist>
