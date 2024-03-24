@@ -64,19 +64,22 @@ class PostRepository {
         try await document.delete()
     }
     
-    func addComment(post: Post, userComment: UserComment) async throws -> Void {
+    func addComment(post: Post, userCommentInfo: UserComment) async throws {
         let document = postsReference.document(post.id.uuidString)
         // UserCommentを辞書型に変換
         let commentDict: [String: Any] = [
-            "id": userComment.id.uuidString, // UUIDをStringに変換
+            "id": userCommentInfo.id.uuidString, // UUIDをStringに変換
             "commentUser": [
-                "name": userComment.commentUser.name,
-                "email": userComment.commentUser.email,
-                "imageUrl": userComment.commentUser.imageUrl,
-                "id": userComment.commentUser.id,
-                "description": userComment.commentUser.description
+                "name": userCommentInfo.commentUser.name,
+                "description": userCommentInfo.commentUser.description,
+                "imageUrl": userCommentInfo.commentUser.imageUrl,
+                "email": userCommentInfo.commentUser.email,
+                "id": userCommentInfo.commentUser.id,
+                "following": userCommentInfo.commentUser.following,
+                "followedBy": userCommentInfo.commentUser.followedBy,
+                "vocabulary": userCommentInfo.commentUser.vocabulary
             ],
-            "comment": userComment.comment
+            "comment": userCommentInfo.comment
         ]
         // コメントを更新
         try await document.updateData([

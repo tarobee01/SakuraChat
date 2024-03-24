@@ -63,7 +63,7 @@ struct FavoritesView: View {
                                         postsVm.toggleFavorite(post: post)
                                     }, label: {
                                         Image(systemName: post.favoriteByUsers.contains(where: {$0 == authVm.user?.id }) ? "heart.fill" : "heart")
-                                            .font(.title)
+                                            .font(.title3)
                                             .animation(.default, value: post.favoriteByUsers.contains(where: {$0 == authVm.user?.id }))
                                     })
                                     .labelStyle(.iconOnly)
@@ -74,7 +74,7 @@ struct FavoritesView: View {
                                             isShowingDialog = true
                                         }) {
                                             Label("Delete", systemImage: "trash")
-                                                .font(.title2)
+                                                .font(.title3)
                                         }
                                         .labelStyle(.iconOnly)
                                         .buttonStyle(.borderless)

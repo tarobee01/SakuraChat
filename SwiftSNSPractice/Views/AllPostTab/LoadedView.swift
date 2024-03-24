@@ -56,7 +56,6 @@ struct LoadedView: View {
                                     .font(.caption)
                             }
                             VStack(alignment: .leading) {
-                                Text(post.title)
                                 Text(post.content)
                             }
                             HStack {

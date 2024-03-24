@@ -16,7 +16,7 @@ struct SettingView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("プロフィール") {
+                Section("Profile") {
                     NavigationLink(destination: EditProfileView(authVm: authVm), label: {
                         HStack(alignment: .top) {
                             AsyncImage(url: URL(string: authVm.userProfile?.imageUrl ?? "https://firebasestorage.googleapis.com/v0/b/swiftsnspractice.appspot.com/o/no_image_square.jpg?alt=media&token=f7256579-130a-4345-9882-e976f3fdf254")) { phase in
@@ -49,7 +49,18 @@ struct SettingView: View {
                         }
                     })
                 }
-                Section("ログインについて") {
+                Section("Vocabulary") {
+                    NavigationLink(destination: 
+                                    NavigationStack {
+                        VocabularyView(authVm: authVm)
+                            .navigationTitle("YourVocabulary")
+                            .navigationBarTitleDisplayMode(.inline)
+                    }
+                    ) {
+                        Text("Vocabulary List")
+                    }
+                }
+                Section("Login Information") {
                     Button(action: {
                         isShowingEditPasswordView = true
                     }, label:  {

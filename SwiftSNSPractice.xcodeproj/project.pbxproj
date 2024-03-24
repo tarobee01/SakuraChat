@@ -26,6 +26,8 @@
 		D96794AF2BA15AD400E0286D /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D96794AE2BA15AD400E0286D /* EditProfileView.swift */; };
 		D988F6872BA016D5005556BF /* MyPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D988F6862BA016D5005556BF /* MyPostView.swift */; };
 		D988F6892BA01F07005556BF /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D988F6882BA01F07005556BF /* SettingView.swift */; };
+		D98DA7202BAE8B0B0072AB05 /* VocabularyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98DA71F2BAE8B0B0072AB05 /* VocabularyView.swift */; };
+		D98DA7222BAE8D090072AB05 /* AddWordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98DA7212BAE8D090072AB05 /* AddWordsView.swift */; };
 		D9A568432BA6820300350799 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A568422BA6820300350799 /* SearchView.swift */; };
 		D9A5684A2BA686B800350799 /* SerachUsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A568492BA686B800350799 /* SerachUsersViewModel.swift */; };
 		D9AA691C2BA2F4AF00653AF0 /* EditEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9AA691B2BA2F4AF00653AF0 /* EditEmailView.swift */; };
@@ -68,8 +70,6 @@
 
 /* Begin PBXFileReference section */
 		D904A80B2BAD20F100CED94A /* SwiftSNSPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftSNSPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D904A80C2BAD20F100CED94A /* SwiftSNSPracticeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = SwiftSNSPracticeTests.xctest; path = "/Users/shinbo0124/Documents/swiftChallenges/SwiftSNSPractice/build/Debug-iphoneos/SwiftSNSPracticeTests.xctest"; sourceTree = "<absolute>"; };
-		D904A80D2BAD20F100CED94A /* SwiftSNSPracticeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = SwiftSNSPracticeUITests.xctest; path = "/Users/shinbo0124/Documents/swiftChallenges/SwiftSNSPractice/build/Debug-iphoneos/SwiftSNSPracticeUITests.xctest"; sourceTree = "<absolute>"; };
 		D9092DD52BA97E0D00B3B6F8 /* OtherUserLikesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherUserLikesView.swift; sourceTree = "<group>"; };
 		D9092DD72BA9909800B3B6F8 /* FollowingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingView.swift; sourceTree = "<group>"; };
 		D9092DD92BA990BF00B3B6F8 /* FollowedByView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowedByView.swift; sourceTree = "<group>"; };
@@ -87,8 +87,12 @@
 		D966A98B2B7A3AA50027F2E0 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		D966A98D2B7A3B440027F2E0 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		D96794AE2BA15AD400E0286D /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		D96A0E0D2BAEBFCE00F46ECD /* SwiftSNSPracticeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = SwiftSNSPracticeTests.xctest; path = "/Users/shinbo0124/Documents/swiftChallenges/SwiftSNSPractice/build/Debug-iphoneos/SwiftSNSPracticeTests.xctest"; sourceTree = "<absolute>"; };
+		D96A0E0E2BAEBFCE00F46ECD /* SwiftSNSPracticeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = SwiftSNSPracticeUITests.xctest; path = "/Users/shinbo0124/Documents/swiftChallenges/SwiftSNSPractice/build/Debug-iphoneos/SwiftSNSPracticeUITests.xctest"; sourceTree = "<absolute>"; };
 		D988F6862BA016D5005556BF /* MyPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPostView.swift; sourceTree = "<group>"; };
 		D988F6882BA01F07005556BF /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
+		D98DA71F2BAE8B0B0072AB05 /* VocabularyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VocabularyView.swift; sourceTree = "<group>"; };
+		D98DA7212BAE8D090072AB05 /* AddWordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWordsView.swift; sourceTree = "<group>"; };
 		D9A568422BA6820300350799 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		D9A568492BA686B800350799 /* SerachUsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerachUsersViewModel.swift; sourceTree = "<group>"; };
 		D9AA691B2BA2F4AF00653AF0 /* EditEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEmailView.swift; sourceTree = "<group>"; };
@@ -164,6 +168,8 @@
 				D9F961442B770D52000A59A9 /* ProfileView.swift */,
 				D988F6862BA016D5005556BF /* MyPostView.swift */,
 				D9F961422B770D2B000A59A9 /* FavoritesView.swift */,
+				D98DA71F2BAE8B0B0072AB05 /* VocabularyView.swift */,
+				D98DA7212BAE8D090072AB05 /* AddWordsView.swift */,
 			);
 			path = ProfileTab;
 			sourceTree = "<group>";
@@ -326,7 +332,7 @@
 			);
 			name = SwiftSNSPracticeTests;
 			productName = SwiftSNSPracticeTests;
-			productReference = D904A80C2BAD20F100CED94A /* SwiftSNSPracticeTests.xctest */;
+			productReference = D96A0E0D2BAEBFCE00F46ECD /* SwiftSNSPracticeTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		D9F9612B2B770BC1000A59A9 /* SwiftSNSPracticeUITests */ = {
@@ -344,7 +350,7 @@
 			);
 			name = SwiftSNSPracticeUITests;
 			productName = SwiftSNSPracticeUITests;
-			productReference = D904A80D2BAD20F100CED94A /* SwiftSNSPracticeUITests.xctest */;
+			productReference = D96A0E0E2BAEBFCE00F46ECD /* SwiftSNSPracticeUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -425,8 +431,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D98DA7222BAE8D090072AB05 /* AddWordsView.swift in Sources */,
 				D966A9862B7A39A60027F2E0 /* AuthView.swift in Sources */,
 				D9589AA82B777C6700977F00 /* EmptyView.swift in Sources */,
+				D98DA7202BAE8B0B0072AB05 /* VocabularyView.swift in Sources */,
 				D9F961622B7713F3000A59A9 /* PostRepository.swift in Sources */,
 				D9A5684A2BA686B800350799 /* SerachUsersViewModel.swift in Sources */,
 				D988F6892BA01F07005556BF /* SettingView.swift in Sources */,

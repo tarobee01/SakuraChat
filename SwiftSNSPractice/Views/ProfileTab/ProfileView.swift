@@ -14,6 +14,17 @@ struct ProfileView: View {
     private let currentUser = Auth.auth().currentUser
     @State private var isShowingDialog = false
     @State private var selectedTab = "MyPosts"
+    @State private var isShowingAddWordsView = false
+    var filteredVocabularyCount: Int {
+        if let vocabulary = authVm.userProfile?.vocabulary {
+            let filteredVocabulary = vocabulary.filter {
+                !authVm.defaultVocabulary.contains($0)
+            }
+            return filteredVocabulary.count
+        } else {
+            return 0
+        }
+    }
 
     var body: some View {
         NavigationStack {
@@ -25,9 +36,10 @@ struct ProfileView: View {
                         Image("backgroundImage")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: .infinity, height: 130)
+                            .frame(maxWidth: .infinity, maxHeight: 130)
                             .background(Color.blue.opacity(0.8))
                             .cornerRadius(5.0)
+                        
                         VStack {
                             //nameとfollow
                             VStack {
@@ -40,6 +52,8 @@ struct ProfileView: View {
                                     Text("\(authVm.userProfile?.following.count ?? 0 ) following")
                                         .font(.subheadline)
                                     Text("\(authVm.userProfile?.followedBy.count ?? 0 ) followers")
+                                        .font(.subheadline)
+                                    Text("\(filteredVocabularyCount) vocabulary")
                                         .font(.subheadline)
                                 }
                             }
@@ -87,7 +101,7 @@ struct ProfileView: View {
                         Button("Sign Out") {
                             authVm.signOutAndErrorHandling()
                         }
-                        .padding(.horizontal, 15)
+                        .padding(.horizontal, 10)
                         .padding(.vertical, 10)
                         .background(Color.blue)
                         .cornerRadius(20)
@@ -101,6 +115,7 @@ struct ProfileView: View {
                     HStack {
                         TabButton(text: "MyPosts", selectedTab: $selectedTab)
                         TabButton(text: "MyLikes", selectedTab: $selectedTab)
+                        TabButton(text: "Vocabulary", selectedTab: $selectedTab)
                     }
                     
                     VStack {
@@ -109,6 +124,8 @@ struct ProfileView: View {
                             MyPostView(postsVm: postsVm, authVm: authVm)
                         case "MyLikes":
                             FavoritesView(postsVm: postsVm, authVm: authVm)
+                        case "Vocabulary":
+                            VocabularyView(authVm: authVm)
                         default:
                             EmptyView()
                         }
@@ -120,6 +137,22 @@ struct ProfileView: View {
             }
             .frame(maxWidth: .infinity)
             .navigationBarTitle("Profile")
+            .toolbar {
+                Button(action: {
+                    isShowingAddWordsView = true
+                }) {
+                    Text("ADD VOCAB")
+                        .font(.subheadline)
+                        .padding(10)
+                        .background(Color.yellow)
+                        .cornerRadius(20)
+                        .foregroundColor(.black)
+
+                }
+            }
+            .sheet(isPresented: $isShowingAddWordsView) {
+                AddWordsView(authVm: authVm)
+            }
         }
         .onAppear {
             postsVm.fetchMyPostsAndErrorHandling()

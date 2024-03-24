@@ -57,7 +57,6 @@ struct MyPostView: View {
                                         .font(.caption)
                                 }
                                 VStack(alignment: .leading) {
-                                    Text(post.title)
                                     Text(post.content)
                                 }
                                 HStack {
@@ -65,7 +64,7 @@ struct MyPostView: View {
                                         postsVm.toggleFavorite(post: post)
                                     }, label: {
                                         Image(systemName: post.favoriteByUsers.contains(where: {$0 == authVm.user?.id }) ? "heart.fill" : "heart")
-                                            .font(.title)
+                                            .font(.title3)
                                             .animation(.default, value: post.favoriteByUsers.contains(where: {$0 == authVm.user?.id }))
                                     })
                                     .labelStyle(.iconOnly)
@@ -76,7 +75,7 @@ struct MyPostView: View {
                                             isShowingDialog = true
                                         }) {
                                             Label("Delete", systemImage: "trash")
-                                                .font(.title2)
+                                                .font(.title3)
                                         }
                                         .labelStyle(.iconOnly)
                                         .buttonStyle(.borderless)

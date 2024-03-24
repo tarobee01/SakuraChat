@@ -31,7 +31,7 @@ class PostsViewModel: ObservableObject {
             }
             .store(in: &cancellables)
         Task {
-            self.allPosts = await fetchAllPostsAndErrorHandling()
+            await fetchAllPostsAndErrorHandling()
         }
     }
     
@@ -43,7 +43,7 @@ class PostsViewModel: ObservableObject {
         print("PostsViewModelData was cleared")
         }
     
-    func fetchAllPostsAndErrorHandling() async -> [Post] {
+    func fetchAllPostsAndErrorHandling() async {
             do {
                 fetchingState = .loading
                 let allPosts = try await postRepository.fetchAllPosts()
@@ -52,11 +52,10 @@ class PostsViewModel: ObservableObject {
                 } else {
                     fetchingState = .loaded
                 }
-                return allPosts
+                self.allPosts = allPosts
             } catch {
                 print("Debug: error occured while fetching all posts: \(error)")
                 fetchingState = .error(error)
-                return []
             }
     }
     
@@ -102,13 +101,13 @@ class PostsViewModel: ObservableObject {
         }
     }
     
-    func addCommentAndErrorHandling(post: Post, userComment: UserComment) {
+    func addCommentAndErrorHandling(post: Post, userCommentInfo: UserComment) {
         Task {
             do {
-                try await postRepository.addComment(post: post, userComment: userComment)
+                try await postRepository.addComment(post: post, userCommentInfo: userCommentInfo)
                 guard let index = self.allPosts.firstIndex(where: { $0.id == post.id }) else { return }
                 DispatchQueue.main.async {
-                    self.allPosts[index].comments.append(userComment)
+                    self.allPosts[index].comments.append(userCommentInfo)
                 }
             } catch {
                 print("Debug: error occured while adding a comment/Error: \(error)")

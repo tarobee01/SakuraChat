@@ -162,5 +162,5 @@ struct SearchUserProfileView: View {
 }
 
 #Preview {
-    SearchUserProfileView(authVm: AuthViewModel(), searchUsersVm: SearchUsersViewModel(), thisProfileUser: UserProfile(name: "no name", description: "no desc", imageUrl: "no image", email: "no email", id: "no id", following: [], followedBy: []))
+    SearchUserProfileView(authVm: AuthViewModel(), searchUsersVm: SearchUsersViewModel(), thisProfileUser: UserProfile(name: "no name", description: "no desc", imageUrl: "no image", email: "no email", id: "no id", following: [], followedBy: [], vocabulary: []))
 }

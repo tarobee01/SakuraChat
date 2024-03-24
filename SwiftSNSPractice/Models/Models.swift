@@ -31,6 +31,7 @@ struct UserProfile: Identifiable, Equatable, Codable {
     var id: String
     var following: [String]
     var followedBy: [String]
+    var vocabulary: [String]
 }
 
 struct UserComment: Identifiable, Equatable, Codable {

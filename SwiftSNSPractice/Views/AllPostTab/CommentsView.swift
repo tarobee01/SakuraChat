@@ -7,11 +7,14 @@
 
 import SwiftUI
 import FirebaseAuth
+import NaturalLanguage
 
 struct CommentsView: View {
-    @State private var userCommentOp: UserComment
+    @State private var userCommentInfo: UserComment
     @ObservedObject var postsVm: PostsViewModel
     @ObservedObject var authVm: AuthViewModel
+    @State private var unfamiliarWords:[String] = []
+    @State private var isShowingAlert = false
     
     let currentUser = Auth.auth().currentUser
     var post: Post
@@ -53,7 +56,6 @@ struct CommentsView: View {
                         .font(.caption)
                 }
                 VStack(alignment: .leading) {
-                    Text(post.title)
                     Text(post.content)
                 }
             }
@@ -97,7 +99,7 @@ struct CommentsView: View {
                                 Text(userComment.commentUser.name)
                                     .font(.subheadline)
                                     .fontWeight(.medium)
-                                Text(userComment.commentUser.email)
+                                Text(userComment.commentUser.id)
                                     .font(.caption)
                                     .fontWeight(.medium)
                             }
@@ -128,12 +130,21 @@ struct CommentsView: View {
                 }
             }.listStyle(PlainListStyle())
         }
+        .alert(isPresented: $isShowingAlert) {
+            let message = unfamiliarWords.joined(separator: ", ")
+                return Alert(
+                    title: Text("Unfamiliar Words"),
+                    message: Text(message),
+                    dismissButton: .default(Text("OK")) {
+                        unfamiliarWords.removeAll()
+                    }
+                )
+        }
         HStack {
-            TextField("add your comment", text: $userCommentOp.comment)
+            TextField("add your comment", text: $userCommentInfo.comment)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
             Button(action: {
-                userCommentOp.id = UUID()
-                postsVm.addCommentAndErrorHandling(post: post, userComment: userCommentOp)
+                checkComment()
             }) {
                 Image(systemName: "paperplane.fill")
             }
@@ -144,15 +155,42 @@ struct CommentsView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
-    init(postsVm: PostsViewModel, authVm: AuthViewModel, post: Post) {
-        let userProfileAl = UserProfile(name: "no name", description: "no description", imageUrl: "https://firebasestorage.googleapis.com/v0/b/swiftsnspractice.appspot.com/o/no_image_square.jpg?alt=media&token=f7256579-130a-4345-9882-e976f3fdf254", email: "no email", id: "no id", following: [], followedBy: [])
-        _userCommentOp = State(initialValue: UserComment(id: UUID(), commentUser: authVm.userProfile ?? userProfileAl, comment: ""))
+    init(postsVm: PostsViewModel, authVm: AuthViewModel, post: Post) {        
+        let userProfileAlt = UserProfile(name: "no name", description: "no description", imageUrl: "https://firebasestorage.googleapis.com/v0/b/swiftsnspractice.appspot.com/o/no_image_square.jpg?alt=media&token=f7256579-130a-4345-9882-e976f3fdf254", email: "no email", id: "no id", following: [], followedBy: [], vocabulary: [])
+        _userCommentInfo = State(initialValue: UserComment(id: UUID(), commentUser: authVm.userProfile ?? userProfileAlt, comment: ""))
         self.postsVm = postsVm
         self.authVm = authVm
         self.post = post
     }
+    
+    func checkComment() {
+        let tokenizer = NLTokenizer(unit: .word)
+        tokenizer.string = userCommentInfo.comment
+        //入力したワードを分解して、抽出
+        var extractedWords: [String] = []
+        tokenizer.enumerateTokens(in: userCommentInfo.comment.startIndex..<userCommentInfo.comment.endIndex) { tokenRange, _ in
+            let word = String(userCommentInfo.comment[tokenRange])
+            extractedWords.append(word)
+            return true
+        }
+        //vocabularyの中に含まれていない単語がないかチェック
+        for word in extractedWords {
+            if let vocabulary = authVm.userProfile?.vocabulary {
+                if !vocabulary.contains(word) {
+                    unfamiliarWords.append(word)
+                }
+            }
+        }
+        //unfamilarWordがあれば、アラートを表示、そうでなければコメントを追加
+        if !unfamiliarWords.isEmpty {
+            isShowingAlert = true
+        } else {
+            userCommentInfo.id = UUID()
+            postsVm.addCommentAndErrorHandling(post: post, userCommentInfo: userCommentInfo)
+        }
+    }
 }
 
 #Preview {
-    CommentsView(postsVm: PostsViewModel(), authVm: AuthViewModel(), post: Post(userProfile: UserProfile(name: "no name", description: "no des", imageUrl: "no url", email: "no email", id: "no id", following: [], followedBy: []), title: "testTitle", content: "testContent", timestamp: Date(), id: UUID(), favoriteByUsers: [], comments: []))
+    CommentsView(postsVm: PostsViewModel(), authVm: AuthViewModel(), post: Post(userProfile: UserProfile(name: "no name", description: "no des", imageUrl: "no url", email: "no email", id: "no id", following: [], followedBy: [], vocabulary: []), title: "", content: "testContent", timestamp: Date(), id: UUID(), favoriteByUsers: [], comments: []))
 }

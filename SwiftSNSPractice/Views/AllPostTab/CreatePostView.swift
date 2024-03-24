@@ -7,16 +7,16 @@
 
 import SwiftUI
 import FirebaseAuth
+import NaturalLanguage
 
 @MainActor
 struct CreatePostView: View {
-    @State var post = Post(userProfile: UserProfile(name: "no name", description: "no description", imageUrl: "no imageUrl", email: "no email", id: "no id", following: [], followedBy: []), title: "", content: "", timestamp: Date(), id: UUID(), favoriteByUsers: [], comments: [])
+    @State var post = Post(userProfile: UserProfile(name: "no name", description: "no description", imageUrl: "no imageUrl", email: "no email", id: "no id", following: [], followedBy: [], vocabulary: []), title: "", content: "", timestamp: Date(), id: UUID(), favoriteByUsers: [], comments: [])
     @Environment(\.dismiss) private var dismiss
     @State var creatingState: CreatingState = .idle
-    @State var isShowingError = false
+    @State private var isShowingError = false
+    @State private var isShowingAlert = false
     @ObservedObject var authVm: AuthViewModel
-    
-    
     var errorMessage: String? {
             switch(creatingState) {
             case .failed(let error):
@@ -25,9 +25,76 @@ struct CreatePostView: View {
                 return nil
             }
         }
-    
     typealias CreatePost =  (Post) async throws -> Void
     let createPost: CreatePost
+    @State private var unfamiliarWords:[String] = []
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("description") {
+                    TextEditor(text: $post.content)
+                        .multilineTextAlignment(.leading)
+                }
+                Button(action: {
+                    checkPost()
+                }) {
+                    switch creatingState {
+                    case .working:
+                        ProgressView()
+                    case .success:
+                        Image(systemName: "checkmark.circle.fill") // 成功マーク
+                    default:
+                        Text("post")
+                    }
+                }
+                .font(.subheadline)
+                .frame(maxWidth: .infinity)
+                .foregroundColor(.white)
+                .listRowBackground(Color.blue)
+            }
+            .navigationTitle("createPost")
+            .alert(isPresented: $isShowingError) {
+                Alert(
+                    title: Text("Error"),
+                    message: Text(errorMessage ?? "Unknown error"),
+                    dismissButton: .default(Text("OK")) {
+                        creatingState = .idle // アラートを閉じたら.idleにリセット
+                    }
+                )
+            }
+            .alert(isPresented: $isShowingAlert) {
+                let message = unfamiliarWords.joined(separator: ", ")
+                    return Alert(
+                        title: Text("Unfamiliar Words"),
+                        message: Text(message),
+                        dismissButton: .default(Text("OK")) {
+                            unfamiliarWords.removeAll()
+                        }
+                    )
+            }
+            .toolbar {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "xmark")
+                        .foregroundColor(.blue)
+                        .font(.headline)
+                }
+            }
+            .onAppear {
+                if let currentUser = Auth.auth().currentUser {
+                    post.userProfile.name = authVm.userProfile?.name ?? "cannnot get name"
+                    post.userProfile.imageUrl = authVm.userProfile?.imageUrl ?? "cannnot get imageURl"
+                    post.userProfile.email = authVm.userProfile?.email ?? "cannnot get email address"
+                    post.userProfile.id = currentUser.uid
+                } else {
+                    print("Debug:: cannot get currentUser in CreatePostView")
+                }
+            }
+        }
+    }
+    
     
     func postAndErrorHandling() {
         Task {
@@ -49,59 +116,29 @@ struct CreatePostView: View {
             }
         }
     }
-    
-    var body: some View {
-        NavigationStack {
-            Form {
-                Section {
-                    TextField("title", text: $post.title)
-                    TextEditor(text: $post.content)
-                        .multilineTextAlignment(.leading)
-                }
-                Button(action: { postAndErrorHandling() }) {
-                    switch creatingState {
-                    case .working:
-                        ProgressView()
-                    case .success:
-                        Image(systemName: "checkmark.circle.fill") // 成功マーク
-                    default:
-                        Text("post")
-                    }
-                }
-                .font(.headline)
-                .frame(maxWidth: .infinity)
-                .foregroundColor(.white)
-                .listRowBackground(Color.accentColor)
-            }
-            .navigationTitle("createPost")
-            .alert(isPresented: $isShowingError) {
-                Alert(
-                    title: Text("Error"),
-                    message: Text(errorMessage ?? "Unknown error"),
-                    dismissButton: .default(Text("OK")) {
-                        creatingState = .idle // アラートを閉じたら.idleにリセット
-                    }
-                )
-            }
-            .toolbar {
-                Button(action: {
-                    dismiss()
-                }) {
-                    Image(systemName: "xmark")
-                        .foregroundColor(.blue)
-                        .font(.headline)
+    func checkPost() {
+        let tokenizer = NLTokenizer(unit: .word)
+        tokenizer.string = post.content
+        //入力したワードを分解して、抽出
+        var extractedWords: [String] = []
+        tokenizer.enumerateTokens(in: post.content.startIndex..<post.content.endIndex) { tokenRange, _ in
+            let word = String(post.content[tokenRange])
+            extractedWords.append(word)
+            return true
+        }
+        //vocabularyの中に含まれていない単語がないかチェック
+        for word in extractedWords {
+            if let vocabulary = authVm.userProfile?.vocabulary {
+                if !vocabulary.contains(word) {
+                    unfamiliarWords.append(word)
                 }
             }
-            .onAppear {
-                if let currentUser = Auth.auth().currentUser {
-                    post.userProfile.name = authVm.userProfile?.name ?? "cannnot get name"
-                    post.userProfile.imageUrl = authVm.userProfile?.imageUrl ?? "cannnot get imageURl"
-                    post.userProfile.email = authVm.userProfile?.email ?? "cannnot get email address"
-                    post.userProfile.id = currentUser.uid
-                } else {
-                    print("Debug:: cannot get currentUser in CreatePostView")
-                }
-            }
+        }
+        //unfamilarWordがあれば、アラートを表示、そうでなければポスト
+        if !unfamiliarWords.isEmpty {
+            isShowingAlert = true
+        } else {
+            postAndErrorHandling()
         }
     }
 }

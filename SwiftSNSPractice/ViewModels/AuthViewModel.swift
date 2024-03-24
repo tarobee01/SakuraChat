@@ -112,17 +112,18 @@ class AuthViewModel: ObservableObject {
     //firestoreにユーザーを登録する
     func createUserProfile(uid: String, name: String, description: String, email: String) async throws {
         let db = Firestore.firestore()
-            try await db.collection("users").document(uid).setData([
-                "name": name,
-                "description": description,
-                "imageUrl": "https://firebasestorage.googleapis.com/v0/b/swiftsnspractice.appspot.com/o/no_image_square.jpg?alt=media&token=f7256579-130a-4345-9882-e976f3fdf254",
-                "email" : email,
-                "id": uid,
-                "following": [],
-                "followedBy": []
-            ])
+        try await db.collection("users").document(uid).setData([
+            "name": name,
+            "description": description,
+            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/swiftsnspractice.appspot.com/o/no_image_square.jpg?alt=media&token=f7256579-130a-4345-9882-e976f3fdf254",
+            "email" : email,
+            "id": uid,
+            "following": [],
+            "followedBy": [],
+            "vocabulary": self.defaultVocabulary
+        ])
     }
-    
+    //プロフィールをゲットする
     func getUserProfile() async throws{
         guard let uid = Auth.auth().currentUser?.uid else { return }
         
@@ -171,8 +172,8 @@ class AuthViewModel: ObservableObject {
         let imagesRef = storageRef.child("userImages\(uid)")
 
         if let imageData = inputImage.jpegData(compressionQuality: 0.8) {
-            let uploadTask = imagesRef.putData(imageData, metadata: nil) { (metadata, error) in
-                guard let metadata = metadata else {
+           imagesRef.putData(imageData, metadata: nil) { (metadata, error) in
+               guard metadata != nil else {
                     print("Debug:: cannot find metadata in AuthViewModel/setUserProfile")
                     return
                 }
@@ -286,6 +287,121 @@ class AuthViewModel: ObservableObject {
             print("Error toggling follow status: \(error.localizedDescription)")
         }
     }
+    
+    //vocabularyに追加する
+    func addWordsToVocabulary(words: [String]) async -> Bool{
+        //firestoreに追加
+        let db = Firestore.firestore()
+        if let uid = Auth.auth().currentUser?.uid {
+            do {
+                let document = try await db.collection("users").document(uid).getDocument()
+                if let existingVocabulary = document.data()?["vocabulary"] as? [String] {
+                    // 既存の単語と重複しないように新しい単語を追加
+                    let updatedVocabulary = Array(Set(existingVocabulary).union(words))
+                    try await db.collection("users").document(uid).updateData(["vocabulary": updatedVocabulary])
+                    //ビューモデルを変更
+                    self.userProfile?.vocabulary = updatedVocabulary
+                    return true
+                } else {
+                    print("Debug:: cannot get existingVocabulary in AuthViewModel/addWordsToVocabulary")
+                    return false
+                }
+            } catch {
+                print("Debug::Error adding words to vocabulary in AuthViewModel/addWordsToVocabulary/Error::\(error)")
+                return false
+            }
+        } else {
+            print("Debug:: cannot get currentUserId in AuthViewModel/addWordsToVocabulary")
+            return false
+        }
+    }
+    
+    //vocabularyからリストの単語を消去する
+    func removeWordFromVocabulary(word: String) async -> Bool {
+        let db = Firestore.firestore()
+        if let uid = Auth.auth().currentUser?.uid {
+            do {
+                let document = try await db.collection("users").document(uid).getDocument()
+                if var existingVocabulary = document.data()?["vocabulary"] as? [String] {
+                    // 単語が存在すれば削除
+                    if let index = existingVocabulary.firstIndex(of: word) {
+                        existingVocabulary.remove(at: index)
+                        try await db.collection("users").document(uid).updateData(["vocabulary": existingVocabulary])
+                        // ビューモデルを更新
+                        self.userProfile?.vocabulary = existingVocabulary
+                        return true
+                    } else {
+                        print("Debug:: Word not found in vocabulary in AuthViewModel/removeWordFromVocabulary")
+                        return false
+                    }
+                } else {
+                    print("Debug:: Cannot get existing vocabulary in AuthViewModel/removeWordFromVocabulary")
+                    return false
+                }
+            } catch {
+                print("Debug:: Error removing word from vocabulary in AuthViewModel/removeWordFromVocabulary/Error::\(error)")
+                return false
+            }
+        } else {
+            print("Debug:: Cannot get current user ID in AuthViewModel/removeWordFromVocabulary")
+            return false
+        }
+    }
+
+    
+    let defaultVocabulary: [String] = [
+            ///　書き言葉バージョン
+            // 格助詞
+            "が", "の", "を", "に", "へ", "と", "で", "から", "より",
+            // 並立助詞
+            "や", "と", "に", "か", "なり", "だの",
+            // 係助詞
+            "は", "も", "こそ", "でも", "しか", "さえ", "など",
+            // 副助詞
+            "ばかり", "まで", "だけ", "ほど", "なら", "くらい", "ぐらい",
+            // 終助詞
+            "か", "よ", "ね", "な", "わ", "さ", "ぜ", "けれども", "けど",
+            // 接続助詞
+            "て",
+            // 助動詞
+            // です、ます形
+            "ます", "ません", "ました", "ませんでした", "ませば", "ましょう", "です", "まし", "でし", "まし",
+            // た形
+            "た", "たら",
+            // ない形
+            "ない", "なかろう", "なく", "なかった", "なければ", "なかれ", "なかっ",
+            // たい形
+            "たい", "たかろう", "たく", "たかった", "たければ",
+            // れる・られる形
+            "れる", "られる", "れた", "れれば",
+            // せる・させる形
+            "せる", "させる", "せた", "せれば",
+            // できる形
+            "できる", "できた", "できれば", "でき",
+            // だろう・でしょう形
+            "だろう", "でしょう",
+            // なる形
+            "なる", "なら", "なった", "なれ", "なれば", "なっ",
+            // べき・べく形
+            "べき", "べく", "べけれ",
+            // ず形
+            "ず", "ぬ", "ずば",
+            // う・おう形
+            "う", "おう", "おった", "えば",
+            // こと・もの形
+            "こと", "もの",
+            // 断定のだ
+            "だ", "だっ",
+            // 感動詞
+            "え", "ああ", "おお", "うわあ", "わあ","へえ",
+            // 基本動詞
+            "ある","あっ","ない","なっ",
+            "する", "し", "いる", "い", "くる", "き",
+            // ??
+            "とっ", "ぶり",
+            ///　口語バージョン
+            "ちゃう", "じゃん", "っす", "っけ", "って", "すぎる", "んだ", "んだよ", "っちゃう", "ったら", "っぽい", "ねえ", "よね", "だよ", "じゃない", "のー", "てる", "ー", "よー"
+    ]
 }
 
 extension User {
