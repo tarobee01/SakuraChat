@@ -15,7 +15,7 @@
 <img src="Resources/checkcomment-ezgif.com-optimize.gif" width="230" />
 単語帳に語彙を追加する
 <img src="Resources/addvocabulary-ezgif.com-optimize.gif" width="230" />
-<h3 style="font-size: 1.0em:">ログイン、ログアウト、アカウント作成</h3> 
+<h3 style="font-size: 1.0em:">サインイン、サインアウト、アカウント作成</h3> 
 ログイン
 <img src="Resources/signin-ezgif.com-optimize.gif" width="230" />
 ログアウト
