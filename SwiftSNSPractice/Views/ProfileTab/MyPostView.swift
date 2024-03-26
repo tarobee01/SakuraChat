@@ -40,11 +40,11 @@ struct MyPostView: View {
                                                 }
                                             }
                                             .scaledToFit()
-                                            .frame(width: 40, height: 40)
+                                            .frame(width: 35, height: 35)
                                             .background(Color.white)
                                             .foregroundColor(.gray)
                                             .clipShape(Circle())
-                                            .overlay(Circle().stroke(Color.white, lineWidth: 4))
+                                            .overlay(Circle().stroke(Color.white, lineWidth: 0))
                                             VStack(alignment: .leading) {
                                                 Text(post.userProfile.name)
                                                     .font(.subheadline)

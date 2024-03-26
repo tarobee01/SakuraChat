@@ -31,11 +31,11 @@ struct LoadedView: View {
                                             case .failure:
                                                 Image(systemName: "person.fill")
                                                     .resizable()
-                                                    .foregroundColor(Color.brownColor)
+                                            
                                             @unknown default:
                                                 Image(systemName: "person.fill")
                                                     .resizable()
-                                                    .foregroundColor(Color.brownColor)
+                                    
                                                     
                                             }
                                         }

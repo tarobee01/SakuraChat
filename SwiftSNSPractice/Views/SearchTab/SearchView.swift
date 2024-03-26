@@ -54,7 +54,10 @@ struct SearchView: View {
         .searchable(text: $searchText, prompt: "Search by name or ID")
         .onChange(of: searchText) {
             Task {
-                await searchUsersVm.fetchUsers(searchText: searchText)
+                let capitalizedText = searchText.capitalized
+                    let trimmedText = capitalizedText.replacingOccurrences(of: " ", with: "")
+                await searchUsersVm.fetchUsers(searchText: trimmedText
+                )
             }
         }
     }
