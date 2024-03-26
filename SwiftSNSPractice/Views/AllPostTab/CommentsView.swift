@@ -21,61 +21,27 @@ struct CommentsView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(alignment: .top, spacing: 10) {
-                    AsyncImage(url: URL(string: post.userProfile.imageUrl)) { phase in
-                        switch phase {
-                        case .empty:
-                            ProgressView()
-                        case .success(let image):
-                            image.resizable()
-                        case .failure:
-                            Image(systemName: "person.fill")
-                                .resizable()
-                        @unknown default:
-                            Image(systemName: "person.fill")
-                                .resizable()
-                        }
-                    }
-                    .scaledToFit()
-                    .frame(width: 40, height: 40)
-                    .background(Color.white)
-                    .foregroundColor(.gray)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray, lineWidth: 0))
-                    VStack(alignment: .leading) {
-                        Text(post.userProfile.name)
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                        Text(post.userProfile.id)
-                            .font(.caption2)
-                            .fontWeight(.medium)
-                    }
+            ZStack {
+                Color.backgroundColor
+                VStack {
                     Spacer()
-                    Text(post.timestamp.formatted(date: .abbreviated, time: .omitted))
-                        .font(.caption)
-                }
-                VStack(alignment: .leading) {
-                    Text(post.content)
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color(UIColor.systemBackground))
-            .cornerRadius(12)
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-            )
-            .padding(.horizontal)
-            .padding(.top, 5)
-
-            //コメントリスト
-            List {
-                ForEach(post.comments) { userComment in
-                    VStack {
-                        HStack {
-                            AsyncImage(url: URL(string: userComment.commentUser.imageUrl)) { phase in
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                    Spacer()
+                    
+                    //ポスト
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack(alignment: .top, spacing: 10) {
+                            AsyncImage(url: URL(string: post.userProfile.imageUrl)) { phase in
                                 switch phase {
                                 case .empty:
                                     ProgressView()
@@ -90,48 +56,128 @@ struct CommentsView: View {
                                 }
                             }
                             .scaledToFit()
-                            .frame(width: 50, height: 50)
+                            .frame(width: 40, height: 40)
                             .background(Color.white)
                             .foregroundColor(.gray)
                             .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.white, lineWidth: 1))
+                            .overlay(Circle().stroke(Color.gray, lineWidth: 0))
                             VStack(alignment: .leading) {
-                                Text(userComment.commentUser.name)
+                                Text(post.userProfile.name)
                                     .font(.subheadline)
                                     .fontWeight(.medium)
-                                Text(userComment.commentUser.id)
-                                    .font(.caption)
+                                    .foregroundColor(Color.brownColor)
+                                Text(post.userProfile.id)
+                                    .font(.caption2)
                                     .fontWeight(.medium)
+                                    .foregroundColor(Color.brownColor)
                             }
                             Spacer()
+                            Text(post.timestamp.formatted(date: .abbreviated, time: .omitted))
+                                .font(.caption)
+                                .foregroundColor(Color.brownColor)
                         }
                         VStack(alignment: .leading) {
-                            Text(userComment.comment)
-                            HStack {
-                                Spacer()
-                                if currentUser?.uid == userComment.commentUser.id {
-                                    Button(action: {
-                                        postsVm.deleteCommentAndErrorHandling(post: post, userComment: userComment)
-                                    }) {
-                                        Label("Delete", systemImage: "trash")
-                                            .font(.title2)
+                            Text(post.content)
+                                .foregroundColor(Color.brownColor)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .cornerRadius(12)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                    )
+                    .padding(.horizontal)
+                    .padding(.top, 5)
+                    .background(Color.backgroundColor)
+                    //コメントリスト
+                    List {
+                        ForEach(post.comments) { userComment in
+                            VStack {
+                                HStack {
+                                    AsyncImage(url: URL(string: userComment.commentUser.imageUrl)) { phase in
+                                        switch phase {
+                                        case .empty:
+                                            ProgressView()
+                                        case .success(let image):
+                                            image.resizable()
+                                        case .failure:
+                                            Image(systemName: "person.fill")
+                                                .resizable()
+                                        @unknown default:
+                                            Image(systemName: "person.fill")
+                                                .resizable()
+                                        }
                                     }
-                                    .labelStyle(.iconOnly)
-                                    .buttonStyle(.borderless)
-                                } else {
-                                    Button("") {
-                                        
+                                    .scaledToFit()
+                                    .frame(width: 50, height: 50)
+                                    .background(Color.white)
+                                    .foregroundColor(.gray)
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.white, lineWidth: 1))
+                                    VStack(alignment: .leading) {
+                                        Text(userComment.commentUser.name)
+                                            .font(.subheadline)
+                                            .fontWeight(.medium)
+                                            .foregroundColor(Color.brownColor)
+                                        Text(userComment.commentUser.id)
+                                            .font(.caption)
+                                            .fontWeight(.medium)
+                                            .foregroundColor(Color.brownColor)
+                                    }
+                                    Spacer()
+                                }
+                                VStack(alignment: .leading) {
+                                    Text(userComment.comment)
+                                        .foregroundColor(Color.brownColor)
+                                    HStack {
+                                        Spacer()
+                                        if currentUser?.uid == userComment.commentUser.id {
+                                            Button(action: {
+                                                postsVm.deleteCommentAndErrorHandling(post: post, userComment: userComment)
+                                            }) {
+                                                Label("Delete", systemImage: "trash")
+                                                    .font(.title3)
+                                                    .foregroundColor(.gray)
+                                            }
+                                            .labelStyle(.iconOnly)
+                                            .buttonStyle(.borderless)
+                                        } else {
+                                            Button("") {
+                                                
+                                            }
+                                        }
                                     }
                                 }
+                                .padding(2)
                             }
+                            .listRowBackground(Color.backgroundColor)
                         }
-                        .padding(2)
                     }
+                    .listStyle(PlainListStyle())
+                    .background(Color.backgroundColor)
+                    //コメント
+                    HStack {
+                        TextField("add your comment", text: $userCommentInfo.comment)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        Button(action: {
+                            checkComment()
+                        }) {
+                            Image(systemName: "paperplane.fill")
+                                .foregroundColor(Color.pinkColor)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 100)
                 }
-            }.listStyle(PlainListStyle())
-        }
-        .alert(isPresented: $isShowingAlert) {
-            let message = unfamiliarWords.joined(separator: ", ")
+            }
+            .ignoresSafeArea()
+            .navigationTitle("Comments")
+            .navigationBarTitleDisplayMode(.inline)
+            .alert(isPresented: $isShowingAlert) {
+                let message = unfamiliarWords.joined(separator: ", ")
                 return Alert(
                     title: Text("Unfamiliar Words"),
                     message: Text(message),
@@ -139,20 +185,8 @@ struct CommentsView: View {
                         unfamiliarWords.removeAll()
                     }
                 )
-        }
-        HStack {
-            TextField("add your comment", text: $userCommentInfo.comment)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-            Button(action: {
-                checkComment()
-            }) {
-                Image(systemName: "paperplane.fill")
             }
         }
-        .frame(maxWidth: .infinity)
-        .padding([.leading, .trailing], 20)
-        .navigationTitle("Comments")
-        .navigationBarTitleDisplayMode(.inline)
     }
     
     init(postsVm: PostsViewModel, authVm: AuthViewModel, post: Post) {        

@@ -13,7 +13,8 @@ struct SearchView: View {
     @State private var searchText = ""
     var body: some View {
         List(searchUsersVm.filteredUsers) { user in
-            NavigationLink(destination: SearchUserProfileView(authVm: authVm, searchUsersVm: searchUsersVm, thisProfileUser: user)) {
+            NavigationLink(destination: 
+                            SearchUserProfileView(authVm: authVm, searchUsersVm: searchUsersVm, thisProfileUser: user)) {
                 HStack {
                     AsyncImage(url: URL(string: user.imageUrl)) { phase in
                         switch phase {
@@ -47,6 +48,7 @@ struct SearchView: View {
                     Spacer()
                 }
             }
+            .listRowBackground(Color.backgroundColor)
         }
         .listStyle(.plain)
         .searchable(text: $searchText, prompt: "Search by name or ID")

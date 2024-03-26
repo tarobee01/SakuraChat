@@ -13,137 +13,165 @@ struct SearchUserProfileView: View {
     @State private var selectedTab = "UserPosts"
     @State private var isFollowing: Bool
     private let thisProfileUser: UserProfile
+    var filteredVocabularyCount: Int {
+        if let vocabulary = searchUsersVm.searchUserProfile?.vocabulary {
+            let filteredVocabulary = vocabulary.filter {
+                !authVm.defaultVocabulary.contains($0)
+            }
+            return filteredVocabulary.count
+        } else {
+            return 0
+        }
+    }
     
     var body: some View {
         NavigationStack {
-            VStack {
-                ZStack {
-                    //背景
-                    Image("backgroundImage")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: .infinity, height: 130)
-                        .background(Color.blue.opacity(0.8))
-                        .cornerRadius(5.0)
-                    //ユーザーのアイコン
-                    AsyncImage(url: URL(string: searchUsersVm.searchUserProfile?.imageUrl ?? "https://firebasestorage.googleapis.com/v0/b/swiftsnspractice.appspot.com/o/no_image_square.jpg?alt=media&token=f7256579-130a-4345-9882-e976f3fdf254")) { phase in
-                        switch phase {
-                        case .empty:
-                            ProgressView()
-                        case .success(let image):
-                            image.resizable()
-                        case .failure:
-                            Image(systemName: "person.fill")
-                                .resizable()
-                        @unknown default:
-                            Image(systemName: "person.fill")
-                                .resizable()
+            ZStack {
+                Color.backgroundColor
+                VStack {
+                    ZStack {
+                        //背景
+                        Image("backgroundImage")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: .infinity, height: 130)
+                            .background(Color.pinkColor)
+                            .cornerRadius(5.0)
+                        //ユーザーのアイコン
+                        AsyncImage(url: URL(string: searchUsersVm.searchUserProfile?.imageUrl ?? "https://firebasestorage.googleapis.com/v0/b/swiftsnspractice.appspot.com/o/no_image_square.jpg?alt=media&token=f7256579-130a-4345-9882-e976f3fdf254")) { phase in
+                            switch phase {
+                            case .empty:
+                                ProgressView()
+                            case .success(let image):
+                                image.resizable()
+                            case .failure:
+                                Image(systemName: "person.fill")
+                                    .resizable()
+                            @unknown default:
+                                Image(systemName: "person.fill")
+                                    .resizable()
+                            }
                         }
-                    }
-                    .scaledToFit()
-                    .frame(width: 80, height: 80)
-                    .background(Color.white)
-                    .foregroundColor(.gray)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                    .offset(y: 67)
+                        .scaledToFit()
+                        .frame(width: 80, height: 80)
+                        .background(Color.white)
+                        .foregroundColor(.gray)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.white, lineWidth: 4))
+                        .offset(y: 67)
 
-                }
-                //nameとfollowers
-                VStack {
-                    Text(searchUsersVm.searchUserProfile?.name ?? thisProfileUser.name)
-                        .font(.title)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.black)
-                        .padding(.top, 10)
-                    HStack {
-                        Text("\(searchUsersVm.searchUserProfile?.following.count ?? thisProfileUser.following.count) following")
-                        Text("\(searchUsersVm.searchUserProfile?.followedBy.count ?? thisProfileUser.followedBy.count) followers")
                     }
-                }
-                .padding(.top, 30)
-                .padding(.horizontal, 30)
-                //descriptionとfollowbutton
-                VStack {
-                    HStack {
-                        Text(searchUsersVm.searchUserProfile?.description ?? thisProfileUser.description)
-                            .font(.subheadline)
+                    //nameとfollowers
+                    VStack {
+                        Text(searchUsersVm.searchUserProfile?.name ?? thisProfileUser.name)
+                            .font(.title)
+                            .fontWeight(.semibold)
                             .foregroundColor(.black)
-                        Spacer()
+                            .padding(.top, 10)
+                        HStack {
+                            Text("\(searchUsersVm.searchUserProfile?.following.count ?? thisProfileUser.following.count) following")
+                            Text("\(searchUsersVm.searchUserProfile?.followedBy.count ?? thisProfileUser.followedBy.count) followers")
+                            Text("\(filteredVocabularyCount) vocabulary")
+                        }
                     }
+                    .padding(.top, 30)
+                    .padding(.horizontal, 30)
+                    //descriptionとfollowbutton
+                    VStack {
+                        HStack {
+                            Text(searchUsersVm.searchUserProfile?.description ?? thisProfileUser.description)
+                                .font(.subheadline)
+                                .foregroundColor(.black)
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        VStack {
+                            if isFollowing {
+                                Button(action: {
+                                    Task {
+                                        await authVm.toggleFollow(currentUserId: authVm.userProfile?.id ?? "no id", targetUserId: searchUsersVm.searchUserProfile?.id ?? thisProfileUser.id)
+                                        toggleIsFollowing()
+                                    }
+                                }) {
+                                    HStack {
+                                        Image(systemName: "person.fill.checkmark")
+                                            .foregroundColor(.white)
+                                        Text("Unfollow")
+                                            .foregroundColor(.white)
+                                    }
+                                    .font(.caption2)
+                                    .fontWeight(.bold)
+                                    .padding(.horizontal, 15)
+                                    .padding(.vertical, 10)
+                                    .background(Color.pinkColor)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                                }
+                            } else {
+                                Button(action: {
+                                    Task {
+                                        await authVm.toggleFollow(currentUserId: authVm.userProfile?.id ?? "no id", targetUserId: searchUsersVm.searchUserProfile?.id ?? thisProfileUser.id)
+                                        toggleIsFollowing()
+                                    }
+                                }) {
+                                    HStack {
+                                        Image(systemName: "person.fill.badge.plus")
+                                            .foregroundColor(.white)
+                                        Text("Follow")
+                                            .foregroundColor(.white)
+                                    }
+                                    .font(.caption2)
+                                    .fontWeight(.bold)
+                                    .padding(.horizontal, 15)
+                                    .padding(.vertical, 10)
+                                    .background(Color.pinkColor)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                                }
+                            }
+                        }
+                    }
+                    .padding(.top, 10)
+                    //タブバー
+                    VStack {
+                        HStack {
+                            TabButton(text: "UserPosts", selectedTab: $selectedTab)
+                            TabButton(text: "UserLikes", selectedTab: $selectedTab)
+                        }
+                        VStack {
+                            switch selectedTab {
+                            case "UserPosts":
+                                OtherUserPostView(searchUsersVm: searchUsersVm, authVm: authVm)
+                            case "UserLikes":
+                                OtherUserLikesView(searchUsersVm: searchUsersVm, authVm: authVm)
+                            default:
+                                EmptyView()
+                            }
+                        }
+                    }
+                    .padding(.top, 30)
                     .padding(.horizontal)
-                    VStack {
-                        if isFollowing {
-                            Button(action: {
-                                Task {
-                                    await authVm.toggleFollow(currentUserId: authVm.userProfile?.id ?? "no id", targetUserId: searchUsersVm.searchUserProfile?.id ?? thisProfileUser.id)
-                                    toggleIsFollowing()
-                                }
-                            }) {
-                                HStack {
-                                    Image(systemName: "person.fill.checkmark")
-                                        .foregroundColor(.white)
-                                    Text("Unfollow")
-                                        .foregroundColor(.white)
-                                }
-                                .padding(.horizontal, 15)
-                                .padding(.vertical, 10)
-                                .background(Color.blue)
-                                .cornerRadius(20)
-                                .font(.subheadline)
-                            }
-                        } else {
-                            Button(action: {
-                                Task {
-                                    await authVm.toggleFollow(currentUserId: authVm.userProfile?.id ?? "no id", targetUserId: searchUsersVm.searchUserProfile?.id ?? thisProfileUser.id)
-                                    toggleIsFollowing()
-                                }
-                            }) {
-                                HStack {
-                                    Image(systemName: "person.fill.badge.plus")
-                                        .foregroundColor(.white)
-                                    Text("Follow")
-                                        .foregroundColor(.white)
-                                }
-                                .padding(.horizontal, 15)
-                                .padding(.vertical, 10)
-                                .background(Color.blue)
-                                .cornerRadius(20)
-                                .font(.subheadline)
-                            }
-                        }
+                    Spacer()
+                }
+                .padding(.top, 150)
+                .onAppear {
+                    Task {
+                        await searchUsersVm.fetchUserPosts(userId: thisProfileUser.id)
+                        await searchUsersVm.fetchUserFavoritePosts(userId: thisProfileUser.id)
+                        await searchUsersVm.getSearchUsersProfile(userUid: thisProfileUser.id)
                     }
                 }
-                .padding(.top, 10)
-                //タブバー
-                VStack {
-                    HStack {
-                        TabButton(text: "UserPosts", selectedTab: $selectedTab)
-                        TabButton(text: "UserLikes", selectedTab: $selectedTab)
+                .navigationBarTitle("OtherUser")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Image("sakuraLogo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40)
                     }
-                    VStack {
-                        switch selectedTab {
-                        case "UserPosts":
-                            OtherUserPostView(searchUsersVm: searchUsersVm, authVm: authVm)
-                        case "UserLikes":
-                            OtherUserLikesView(searchUsersVm: searchUsersVm, authVm: authVm)
-                        default:
-                            EmptyView()
-                        }
-                    }
-                }
-                .padding(.top, 30)
-                .padding(.horizontal)
-                Spacer()
-            }
-            .onAppear {
-                Task {
-                    await searchUsersVm.fetchUserPosts(userId: thisProfileUser.id)
-                    await searchUsersVm.fetchUserFavoritePosts(userId: thisProfileUser.id)
-                    await searchUsersVm.getSearchUsersProfile(userUid: thisProfileUser.id)
                 }
             }
-            .navigationBarTitle("OtherUser")
+            .ignoresSafeArea()
         }
     }
     

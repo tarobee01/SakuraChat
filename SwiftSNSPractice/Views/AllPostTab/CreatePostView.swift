@@ -31,28 +31,41 @@ struct CreatePostView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section("description") {
-                    TextEditor(text: $post.content)
-                        .multilineTextAlignment(.leading)
-                }
-                Button(action: {
-                    checkPost()
-                }) {
-                    switch creatingState {
-                    case .working:
-                        ProgressView()
-                    case .success:
-                        Image(systemName: "checkmark.circle.fill") // 成功マーク
-                    default:
-                        Text("post")
+            ZStack {
+                Color.backgroundColor
+                VStack {
+                        TextEditor(text: $post.content)
+                            .frame(height: 200)
+                            .cornerRadius(5)
+                            .shadow(radius: 2)
+                            .padding()
+                    Button(action: {
+                        checkPost()
+                    }) {
+                        switch creatingState {
+                        case .working:
+                            ProgressView()
+                        case .success:
+                            Image(systemName: "checkmark.circle.fill") 
+                                .padding(.horizontal, 15)
+                                .padding(.vertical, 10)
+                                .cornerRadius(10)
+                        default:
+                            Text("Post")
+                                .fontWeight(.bold)
+                        }
                     }
+                    .padding(.horizontal, 15)
+                    .padding(.vertical, 10)
+                    .background(Color.pinkColor)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    Spacer()
                 }
-                .font(.subheadline)
-                .frame(maxWidth: .infinity)
-                .foregroundColor(.white)
-                .listRowBackground(Color.blue)
+                .background(Color.backgroundColor)
+                .padding(.top, 100)
             }
+            .ignoresSafeArea()
             .navigationTitle("createPost")
             .alert(isPresented: $isShowingError) {
                 Alert(
@@ -78,7 +91,7 @@ struct CreatePostView: View {
                     dismiss()
                 }) {
                     Image(systemName: "xmark")
-                        .foregroundColor(.blue)
+                        .foregroundColor(Color.pinkColor)
                         .font(.headline)
                 }
             }

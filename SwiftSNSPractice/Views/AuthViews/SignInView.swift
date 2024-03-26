@@ -14,8 +14,9 @@ struct SignInView: View {
 
     var body: some View {
         VStack {
-            Text("Sign In")
+            Text("SakuraChat")
                 .font(.title.bold())
+                .foregroundColor(Color.brownColor)
             Group {
                 TextField("email", text: $email)
                     .textContentType(.emailAddress)
@@ -32,7 +33,7 @@ struct SignInView: View {
             .padding()
                 .frame(maxWidth: .infinity)
                 .foregroundColor(.white)
-                .background(Color.accentColor)
+                .background(Color.pinkColor)
                 .cornerRadius(10)
         }
         .alert("SignIn Error", isPresented: $authVm.isSignInError) {
@@ -43,10 +44,12 @@ struct SignInView: View {
         .onSubmit {
             authVm.signInAndErrorHandling(email: email, password: password)
         }
-        .padding()
+        .padding(.horizontal)
     }
 }
 
 #Preview {
     SignInView(authVm: AuthViewModel())
 }
+
+

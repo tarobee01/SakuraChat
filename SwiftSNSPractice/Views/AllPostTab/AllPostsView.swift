@@ -15,38 +15,54 @@ struct AllPostsView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                switch(postsVm.fetchingState) {
-                case .loading:
-                    ProgressView()
-                case .loaded:
-                    LoadedView(postsVm: postsVm, authVm: authVm)
-                case .empty:
-                    EmptyView()
-                case .error(let error):
-                    ErrorView(error: error, retryfetch: {
-                        Task {
-                            await postsVm.fetchAllPostsAndErrorHandling()
+            ZStack {
+                Color.backgroundColor
+                VStack {
+                    switch(postsVm.fetchingState) {
+                    case .loading:
+                        ProgressView()
+                    case .loaded:
+                        LoadedView(postsVm: postsVm, authVm: authVm)
+                    case .empty:
+                        EmptyView()
+                    case .error(let error):
+                        ErrorView(error: error, retryfetch: {
+                            Task {
+                                await postsVm.fetchAllPostsAndErrorHandling()
+                            }
+                        })
+                    }
+                }
+                .navigationTitle("AllPosts")
+                .foregroundColor(Color.brownColor)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {isCreatePostViewShowing = true}) {
+                            Image(systemName: "square.and.pencil")
+                                .font(.headline)
+                                .foregroundColor(Color.brownColor)
                         }
-                    })
+                    }
+                    
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Image("sakuraLogo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40)
+                    }
+
                 }
-            }
-            .navigationTitle("AllPosts")
-            .toolbar {
-                Button(action: {isCreatePostViewShowing = true}) {
-                    Image(systemName: "square.and.pencil")
-                        .font(.headline)
+                .sheet(isPresented: $isCreatePostViewShowing) {
+                    CreatePostView(authVm: authVm, createPost: postsVm.makeCreatePostfunc())
                 }
-            }
-            .sheet(isPresented: $isCreatePostViewShowing) {
-                CreatePostView(authVm: authVm, createPost: postsVm.makeCreatePostfunc())
-            }
-            .onAppear {
-                Task {
-                    await postsVm.fetchAllPostsAndErrorHandling()
+                .onAppear {
+                    Task {
+                        await postsVm.fetchAllPostsAndErrorHandling()
+                    }
                 }
             }
         }
+
     }
 }
 

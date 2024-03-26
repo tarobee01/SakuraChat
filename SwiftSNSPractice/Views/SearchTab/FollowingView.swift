@@ -15,7 +15,6 @@ struct FollowingView: View {
     @State private var followingUsers: [UserProfile] = []
     
     var body: some View {
-
         List(followingUsers) { user in
             NavigationLink(destination: SearchUserProfileView(authVm: authVm, searchUsersVm: searchUsersVm, thisProfileUser: user)) {
                 HStack {
@@ -51,6 +50,7 @@ struct FollowingView: View {
                     Spacer()
                 }
             }
+            .listRowBackground(Color.backgroundColor)
 
         }
         .listStyle(.plain)

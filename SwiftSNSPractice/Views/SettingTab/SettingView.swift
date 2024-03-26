@@ -34,11 +34,11 @@ struct SettingView: View {
                                 }
                             }
                             .scaledToFit()
-                            .frame(width: 50, height: 50)
+                            .frame(width: 45, height: 45)
                             .background(Color.white)
                             .foregroundColor(.gray)
                             .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.white, lineWidth: 4))
+                            .overlay(Circle().stroke(Color.white, lineWidth: 0))
                             VStack(alignment: .leading) {
                                 Text(authVm.userProfile?.name ?? "no name")
                                     .font(.title3)
@@ -52,24 +52,29 @@ struct SettingView: View {
                 Section("Vocabulary") {
                     NavigationLink(destination: 
                                     NavigationStack {
-                        VocabularyView(authVm: authVm)
-                            .navigationTitle("YourVocabulary")
-                            .navigationBarTitleDisplayMode(.inline)
+                        ZStack {
+                            Color.backgroundColor
+                            VocabularyView(authVm: authVm)
+                                .navigationTitle("YourVocabulary")
+                                .navigationBarTitleDisplayMode(.inline)
+                                .padding(.top, 100)
+                        }
+                        .ignoresSafeArea()
                     }
                     ) {
-                        Text("Vocabulary List")
+                        Text("My Vocabulary")
                     }
                 }
                 Section("Login Information") {
                     Button(action: {
                         isShowingEditPasswordView = true
                     }, label:  {
-                        Text("パスワードを変更する")
+                        Text("Change My Password")
                     })
                     Button(action: {
                         isShowingEditEmailView = true
                     }, label: {
-                        Text("メールアドレスを変更する")
+                        Text("Change My Email")
                     })
                 }
             }

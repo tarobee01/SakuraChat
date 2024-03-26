@@ -20,51 +20,67 @@ struct AddWordsView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Form {
-                    Section("write a word") {
+                VStack {
+                    HStack {
+                        TextField("What you learned today", text: $inputText)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .background(Color(.systemGray6))
+
                         Button("ADD TO TABLE ↓") {
                             addedWordsList.append(inputText)
                         }
-                        .font(.subheadline)
-                        .frame(maxWidth: .infinity)
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 10)
+                        .background(Color.pinkColor)
                         .foregroundColor(.white)
-                        .listRowBackground(Color.blue)
-                        TextField("what you learned today", text: $inputText)
+                        .cornerRadius(10)
                     }
-
-                    Section("Table") {
-                        Button("Add Words To Your Vocabulary +") {
+                    .padding(.horizontal)
+                    
+                    VStack {
+                        Button(action: {
                             Task {
                                 let result = await authVm.addWordsToVocabulary(words: addedWordsList)
                                 if result == true {
                                     alertTitle = "Succeed"
-                                    alertMessage = "new words was added to your vocabulary"
+                                    alertMessage = "New words were added to your vocabulary"
                                     isShowingAlert = true
                                 } else {
-                                    alertTitle = "Faild"
-                                    alertMessage = "failed to add new words to your vocabulary"
+                                    alertTitle = "Failed"
+                                    alertMessage = "Failed to add new words to your vocabulary"
                                     isShowingAlert = true
                                 }
                             }
+                        }) {
+                            Text("Add to My Vocabulary +")
                         }
-                        .font(.subheadline)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 0)
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 10)
+                        .background(Color.pinkColor)
                         .foregroundColor(.white)
-                        .listRowBackground(Color.blue)
-                        List {
-                            ForEach(addedWordsList, id: \.self) { word in
-                                Text(word)
+                        .cornerRadius(10)
+                        VStack {
+                            Text("TABLE")
+                            List {
+                                ForEach(addedWordsList, id: \.self) { word in
+                                    Text(word)
+                                }
+                                .onDelete { indices in
+                                    addedWordsList.remove(atOffsets: indices)
+                                }
                             }
-                            .onDelete { indices in
-                                addedWordsList.remove(atOffsets: indices)
-                            }
+                            .listStyle(.plain)
                         }
-                        .listStyle(.plain)
                     }
+                    .padding(.top, 50)
                 }
+                .padding(.top)
             }
-            .navigationTitle("Add words to Vocabulary")
+            .navigationTitle("Add Words to Vocabulary")
             .navigationBarTitleDisplayMode(.inline)
             .alert(isPresented: $isShowingAlert) {
                 return Alert(
@@ -83,15 +99,13 @@ struct AddWordsView: View {
                         dismiss()
                     }) {
                         Image(systemName: "xmark")
-                            .foregroundColor(.blue)
+                            .foregroundColor(Color.pinkColor)
                             .font(.headline)
                     }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-
-                }
             }
         }
+
     }
     
     init(authVm: AuthViewModel) {

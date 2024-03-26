@@ -50,6 +50,7 @@ struct FollowedByView: View {
                     Spacer()
                 }
             }
+            .listRowBackground(Color.backgroundColor)
         }
         .listStyle(.plain)
         .onAppear {
