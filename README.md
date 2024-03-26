@@ -3,14 +3,41 @@
 <br></br>
 <br></br>
 
-<h2 style="font-size: 1.5em;">使用した技術</h2>
+<h1 style="font-size: 1.5em;">使用した技術</h2>
 ・Swift, SwiftUI<br></br>
 ・naturalLanguage, combine, photosUI<br></br> 
 ・firebase<br></br>
 ・github, xcode<br></br>
 <br></br>
 
-<h2 style="font-size: 1.5em;">機能実装例</h2>
+<h1 style="font-size: 1.5em;">アプリビューと機能</h2>
+<h2>アプリビュー</h2>
+<table>
+  <tr>
+    <td style="width: 230px;">
+      <p>認証ビュー</p>
+      <img src="Resources/Auth.png" width="230" />
+    </td>
+    <td style="width: 230px;">
+      <p>ポストリストビュー</p>
+      <img src="Resources/Allpost.png" width="230" />
+    </td>
+    <td style="width: 230px;">
+      <p>プロフィールビュー</p>
+      <img src="Resources/Profile.png" width="230" />
+    </td>
+    <td style="width: 230px;">
+      <p>設定ビュー</p>
+      <img src="Resources/Setting.png" width="230" />
+    </td>
+    <td style="width: 230px;">
+      <p>ユーザー検索ビュー</p>
+      <img src="Resources/Search.png" width="230" />
+    </td>
+  </tr>
+</table>
+<br></br>
+<h2>機能</h2>
 <h3 style="font-size: 1.0em;">投稿チェックと単語帳</h3>
 <table>
   <tr>
